@@ -1,0 +1,52 @@
+'use strict'
+
+// I needed neighbors loop for multiple other functions so I 
+// just made this general function that returns array of indexes
+function returnNeighborsIndexes(rowIdx, colIdx) {
+
+    const res = []
+
+    for (var i = rowIdx - 1; i < rowIdx + 2; i++) {
+        // skips rows out of bound
+        if (i < 0 || i >= gBoard.length) continue
+
+        for (var j = colIdx - 1; j < colIdx + 2; j++) {
+            // skips columns out of bound
+            if (j < 0 || j >= gBoard[i].length) continue
+            // skips initial cell that called for neighbors
+            if (i === rowIdx && j === colIdx) continue
+
+            // creates index element and pushes into result
+            const currCell = { i, j }
+            res.push(currCell)
+        }
+    }
+    return res
+}
+
+function updateTimer() {
+    // local const for calculations
+    const currTime = Date.now()
+
+    // updates model and saves the time globaly for high scores to be added
+    gTimer.timerEnd = currTime - gTimer.timerStart
+
+    // variables to make time passed legible
+    var timerMins = Math.floor(gTimer.timerEnd / 60000).toString()
+    if (timerMins.length === 1) timerMins = '0' + timerMins
+    var timerSecs = Math.floor((gTimer.timerEnd / 1000)%60).toString()
+    if (timerSecs.length === 1) timerSecs = '0' + timerSecs
+    var timerMillis = Math.floor(gTimer.timerEnd % 1000).toString()
+    if (timerMillis.length === 1) timerMillis = '00' + timerMillis
+    else if (timerMillis.length === 2) timerMillis = '0' + timerMillis
+
+    // updates DOM
+    elTimer.innerText = `${timerMins}:${timerSecs}:${timerMillis}`
+}
+
+function getRandomInt(min, max) {
+    // magic function  ;-)
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled)
+}
