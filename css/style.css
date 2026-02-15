@@ -1,0 +1,43 @@
+html,
+body {
+    text-align: center;
+    background-image: radial-gradient(ellipse,
+            #ec2c2cef 10%, #f7f445e5 30%, #ff9a2e 60%);
+    background-repeat: no-repeat;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+}
+
+.board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+table {
+    border: 5px solid black;
+    padding: 5px;
+}
+
+.cell {
+    cursor: default;
+    background-color: darkcyan;
+    font-size: 120%;
+    font-weight: bold;
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.timer {
+    font-family: monospace;
+}
