@@ -11,17 +11,53 @@
 
 <body onload="onInit()">
     <h1 class="MS-Header">Minesweeper</h1>
-    <h2 class="mines-remaining">Mines left: <span></span></h2>
-    <h2 class="timer">00:00:000</h2>
 
-    <button class="restart-button" onclick="onInit()"></button>
+    <h2 class="mines-remaining">Mines left: <span></span></h2>
+    <h2><span class="timer">00:00:000</span> | Lives left: <span class="lives"></span></h2>
+    <h2 class="hints"> Hints:
+        <button class="hint1" onclick="handleHint(this)">💡</button>
+        <button class="hint2" onclick="handleHint(this)">💡</button>
+        <button class="hint3" onclick="handleHint(this)">💡</button>
+    </h2>
+
     <div class="end-modal hidden"></div>
 
-    <div class="board-container"></div>
+    <div class="utility-buttons">
+        <div class="settings">
+            <button class="settingsBtn" onclick="settingsBtn()">⚙️</button>
+            <div class="settings-container hidden">
+                <fieldset>
+                    <legend>Select difficulty:</legend>
+
+                    <div>
+                        <input type="radio" id="easy" name="difficulty" value="easy" />
+                        <label for="easy">Toddler</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="intermediate" name="difficulty" value="intermediate" checked />
+                        <label for="intermediate">Teenager</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="hard" name="difficulty" value="hard" />
+                        <label for="hard">Adult</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="expert" name="difficulty" value="expert" />
+                        <label for="expert">Wise Elder</label>
+                    </div>
+            </div>
+        </div>
+
+        <button class="restart-button" onclick="onInit()"></button>
+    </div>
+
+
+    <div class="board-container dont-click"></div>
 
 
     <script src="js/main.js"></script>
-    <script src="js/board.js"></script>
+    <script src="js/boardDOM.js"></script>
+    <script src="js/boardModel.js"></script>
     <script src="js/clicks.js"></script>
     <script src="js/utilities.js"></script>
 </body>

@@ -28,11 +28,17 @@ table {
     background-color: darkcyan;
     font-size: 120%;
     font-weight: bold;
-    height: 40px;
-    width: 40px;
+    height: 30px;
+    width: 30px;
     padding: 0;
     margin: 0;
+    user-select: none;
 }
+
+.revealed-cell {
+    background-color: cadetblue;
+}
+
 
 .hidden {
     display: none;
@@ -40,4 +46,39 @@ table {
 
 .timer {
     font-family: monospace;
+}
+
+.clicked-mine {
+    background-color: rgb(229, 14, 14);
+}
+
+.utility-buttons {
+    position: flex;
+    left: 0%;
+}
+
+.settings {
+    position: absolute;
+    left: 40%;
+    text-align: left;
+    display: inline-block;
+    user-select: none;
+}
+
+.settings-container {
+    background-color: rgb(209, 162, 61);
+    border: 5px solid black;
+}
+
+.settingsBtn {
+    cursor: pointer;
+}
+
+.restart-button {
+    cursor: pointer;
+    font-size: large;
+    height: 40px;
+    width: 40px;
+    margin-bottom: 5px;
+    user-select: none;
 }

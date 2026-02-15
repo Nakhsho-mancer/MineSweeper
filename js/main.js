@@ -1,10 +1,10 @@
 'use strict'
 
 // consts for different levels
-const easy = { rows: 4, columns: 4, mines: 2 }
-const intermediate = { rows: 9, columns: 9, mines: 10 }
-const hard = { rows: 16, columns: 16, mines: 40 }
-const expert = { rows: 16, columns: 30, mines: 99 }
+const easy = { name: 'easy', rows: 4, columns: 4, mines: 2 }
+const intermediate = { name: 'intermediate', rows: 9, columns: 9, mines: 10 }
+const hard = { name: 'hard', rows: 16, columns: 16, mines: 40 }
+const expert = { name: 'expert', rows: 16, columns: 30, mines: 99 }
 const levelsArray = [ /* tba custom*/ easy, intermediate, hard, expert]
 
 // new game icons
@@ -16,9 +16,9 @@ const SKULL = "💀"
 const elTimer = document.querySelector('.timer')
 const elResetButton = document.querySelector('.restart-button')
 const elEndModal = document.querySelector('.end-modal')
+const elDifficultySetting = document.querySelectorAll('input[name="difficulty"]')
 
 // model variables
-var gBoard
 
 var gTimer = {
     timerStart: 0,
@@ -28,12 +28,12 @@ var gTimer = {
 
 
 var gGame = {
-    isOn: false,
     revealedCells: 0,
-    timePassed: 0,
     currentMines: 0,
     goal: 0,
-    levelSelected: intermediate
+    livesLeft: 3,
+    levelSelected: intermediate,
+    isOn: false
 }
 
 // main function, called on start and on new game
@@ -42,10 +42,10 @@ function onInit() {
     gBoard = buildBoard(gGame.levelSelected)
 
     // resets global game elements, mostly needed for new games
-    gGame.currentMines = gGame.levelSelected.mines
     gGame.revealedCells = 0
-    gGame.timePassed = 0
+    gGame.currentMines = gGame.levelSelected.mines
     gGame.goal = gGame.levelSelected.rows * gGame.levelSelected.columns - gGame.levelSelected.mines
+    gGame.livesLeft = 3
     gGame.isOn = true
 
     // resets timer
@@ -60,28 +60,48 @@ function onInit() {
 
     // renders DOM
     renderBoard(gBoard)
-    updateMinesLeft()
 }
 
-function handleVictory() {
-    // updates model
-    gGame.isOn = false
-    clearInterval(gTimer.timerInterval)
+// event listener loop for when user changes difficulty settings
+elDifficultySetting.forEach(radio => {
+    radio.addEventListener('change', function () {
 
-    // updates DOM
-    elResetButton.innerText = SUN_GLASSES
-    elEndModal.innerText = 'Victory!'
-    elEndModal.classList.remove('hidden')
+        // captures new difficulty value
+        const diffStr = this.value
+
+        // loops on difficulties array
+        for (var i = 0; i < levelsArray.length; i++) {
+
+            // changes global difficulty value and relaunch game
+            if (levelsArray[i].name === diffStr) {
+                gGame.levelSelected = levelsArray[i]
+                onInit()
+                document.querySelector('.settings-container').classList.add('hidden')
+                break
+            }
+        }
+    })
+})
+
+function handleVictory() {
+    // sends appropriate boolian to end game function
+    handleGameEnd(true)
 }
 
 function handleDefeat() {
+    // sends appropriate boolian to end game function
+    handleGameEnd(false)
+}
+
+function handleGameEnd(win) {
     // updates model
     gGame.isOn = false
     clearInterval(gTimer.timerInterval)
 
     // updates DOM
-    elResetButton.innerText = SKULL
-    elEndModal.innerText = 'Game over'
+    renderEndBoard()
+    elResetButton.innerText = (win ? SUN_GLASSES : SKULL)
+    elEndModal.innerText = (win ? 'Victory!' : 'Game over')
     elEndModal.classList.remove('hidden')
 }
 
@@ -103,9 +123,19 @@ function firstClick(elCell, i, j) {
     updateNeighborCount(gBoard)
 
     // if the cell was "0" calls revealing function
-    if (!modelCell.neighboringMines) recursiveReveal(i, j)
+    if (!modelCell.neighboringMines) {
+        recursiveReveal(i, j)
 
-    // updates DOM and starts the timer
-    elCell.innerText = modelCell.neighboringMines
+        // updates DOM
+        elCell.classList.add('revealed-cell')
+        elCell.innerText = ''
+    }
+
+    else {
+        elCell.classList.add('revealed-cell')
+        elCell.innerText = modelCell.neighboringMines
+    }
+
+    // starts the timer
     startTimer()
 }

@@ -1,15 +1,12 @@
 'use strict'
 
-// icons
-const BOOM = "💣"
-const FLAG = "🏴‍☠️"
-
 // capture cells table for easier access
 const elContainter = document.querySelector('.board-container')
 
 // global click boolians to direct to relavant functions
 var gLeftClick = false
 var gRightClick = false
+var gHintClick = false
 
 // disables right click menu
 elContainter.addEventListener('contextmenu', event => event.preventDefault())
@@ -17,7 +14,7 @@ elContainter.addEventListener('contextmenu', event => event.preventDefault())
 elContainter.addEventListener('mousedown', event => {
     // consts to capture DOM element and relevant indexes
     const elCell = event.target
-    if (elCell.classList.value === 'table') return
+    if (elCell.classList.contains('dont-click')) return
     const cellRowIdx = +elCell.dataset.row
     const cellColIdx = +elCell.dataset.col
 
@@ -47,15 +44,26 @@ function cellClick(elCell, i, j) {
     if (modelCell.isFlagged) return
     if (modelCell.isRevealed) return
 
+    // hint condition
+    if (gHintClick) {
+        timedReveal(i, j)
+        return
+    }
+
     // update model
     modelCell.isRevealed = true
 
     if (modelCell.isMine) {
-        // update model for mine, later lives will be added to logic
-        elCell.innerText = BOOM
+        // update model mines and lives
         gGame.currentMines--
+        gGame.livesLeft--
+
         updateMinesLeft()
-        handleDefeat()
+        updtaeLives()
+
+        // updates DOM
+        elCell.innerText = BOOM
+        elCell.classList.add('clicked-mine')
     }
 
     // if the cell is "safe"
@@ -63,17 +71,18 @@ function cellClick(elCell, i, j) {
         // update model
         gGame.revealedCells++
 
-        // if it was the first cell start timer, later rendering for safe will be added
+        // if it was the first cell call initalizing function
         if (gGame.revealedCells === 1) {
             firstClick(elCell, i, j)
             return
         }
 
-        // if it was the last cell
+        // if it was the last cell call ending function
         if (gGame.revealedCells === gGame.goal) handleVictory()
 
         // update DOM
-        elCell.innerText = modelCell.neighboringMines
+        elCell.classList.add('revealed-cell')
+        elCell.innerText = (modelCell.neighboringMines ? modelCell.neighboringMines : '')
 
         // if the cell was "0" calls revealing function
         if (!modelCell.neighboringMines) recursiveReveal(i, j)
@@ -99,7 +108,7 @@ function cellFlagged(elCell, i, j) {
 }
 
 function rightAndLeftClick(i, j) {
-    if (!gGame.isOn) return
+    if (!gGame.isOn || gHintClick) return
 
     // capture model element
     const modelCell = gBoard[i][j]
@@ -112,8 +121,10 @@ function rightAndLeftClick(i, j) {
     const neighborsArray = returnNeighborsIndexes(i, j)
 
     for (var k = 0; k < neighborsArray.length; k++) {
+        // capture cell to check
         const currCell = gBoard[neighborsArray[k].i][neighborsArray[k].j]
-        if (currCell.isFlagged) flagsAround++
+        // update conditional variable with flags or exploded mines
+        if (currCell.isFlagged || (currCell.isMine && currCell.isRevealed)) flagsAround++
     }
 
     // calls for area reveal
@@ -140,7 +151,8 @@ function recursiveReveal(rowIdx, colIdx) {
 
         // updates DOM
         const elCell = document.querySelector(`[data-row="${currI}"][data-col="${currJ}"]`)
-        elCell.innerText = currCell.neighboringMines
+        elCell.classList.add('revealed-cell')
+        elCell.innerText = (currCell.neighboringMines ? currCell.neighboringMines : '')
 
         // checks other "0" cells for expanded area reveal and victory condition
         if (!currCell.neighboringMines) recursiveReveal(currI, currJ)
