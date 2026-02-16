@@ -56,7 +56,7 @@ function handleHelperCheckbox(event, helperID) {
 
 function resetHelpers() {
     // resets helpers model elements
-    gHelpers.lives = (!gHelpersBoolians.lives ? 1 : (gGame.levelSelected === easy) ? 2 : 3)
+    gHelpers.lives = (!gHelpersBoolians.lives ? 1 : (gGame.levelSelected === levelsArray[0]) ? 2 : 3)
     gHintClick = false
     gHelpers.safeClicks = (gHelpersBoolians.safeClicks ? 3 : 0)
     gMegaHintClick = 0
