@@ -7,6 +7,9 @@ const elContainter = document.querySelector('.board-container')
 var gLeftClick = false
 var gRightClick = false
 var gHintClick = false
+var gMegaHintClick = 0
+var gMegaArray = []
+
 
 // disables right click menu
 elContainter.addEventListener('contextmenu', event => event.preventDefault())
@@ -40,6 +43,17 @@ function cellClick(elCell, i, j) {
     // capture model element by index
     const modelCell = gBoard[i][j]
 
+    // mega hint condition
+    if (gMegaHintClick) {
+        // saves indexes in objects array
+        gMegaArray.push({ i, j })
+        gMegaHintClick--
+
+        // sends to renderer when finished
+        if (!gMegaHintClick) renderMega(gMegaArray)
+        return
+    }
+
     // exit conditions
     if (modelCell.isFlagged) return
     if (modelCell.isRevealed) return
@@ -49,6 +63,7 @@ function cellClick(elCell, i, j) {
         timedReveal(i, j)
         return
     }
+
 
     // update model
     modelCell.isRevealed = true
@@ -78,7 +93,7 @@ function cellClick(elCell, i, j) {
         }
 
         // if it was the last cell call ending function
-        if (gGame.revealedCells === gGame.goal) handleVictory()
+        if (gGame.revealedCells === gGame.goal) handleGameEnd(true)
 
         // update DOM
         elCell.classList.add('revealed-cell')
@@ -108,7 +123,7 @@ function cellFlagged(elCell, i, j) {
 }
 
 function rightAndLeftClick(i, j) {
-    if (!gGame.isOn || gHintClick) return
+    if (!gGame.isOn || gHintClick || gMegaHintClick) return
 
     // capture model element
     const modelCell = gBoard[i][j]
@@ -156,6 +171,6 @@ function recursiveReveal(rowIdx, colIdx) {
 
         // checks other "0" cells for expanded area reveal and victory condition
         if (!currCell.neighboringMines) recursiveReveal(currI, currJ)
-        if (gGame.revealedCells === gGame.goal) handleVictory()
+        if (gGame.revealedCells === gGame.goal) handleGameEnd(true)
     }
 }

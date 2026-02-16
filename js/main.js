@@ -1,11 +1,12 @@
 'use strict'
 
-// consts for different levels
-const easy = { name: 'easy', rows: 4, columns: 4, mines: 2 }
-const intermediate = { name: 'intermediate', rows: 9, columns: 9, mines: 10 }
-const hard = { name: 'hard', rows: 16, columns: 16, mines: 40 }
-const expert = { name: 'expert', rows: 16, columns: 30, mines: 99 }
-const levelsArray = [ /* tba custom*/ easy, intermediate, hard, expert]
+// objects array for different levels
+const levelsArray = [
+    { name: 'easy', rows: 4, columns: 4, mines: 2 },
+    { name: 'intermediate', rows: 9, columns: 9, mines: 10 },
+    { name: 'hard', rows: 16, columns: 16, mines: 40 },
+    { name: 'expert', rows: 16, columns: 30, mines: 99 }
+]
 
 // new game icons
 const SMILE = "🙂"
@@ -16,22 +17,19 @@ const SKULL = "💀"
 const elTimer = document.querySelector('.timer')
 const elResetButton = document.querySelector('.restart-button')
 const elEndModal = document.querySelector('.end-modal')
-const elDifficultySetting = document.querySelectorAll('input[name="difficulty"]')
 
 // model variables
-
 var gTimer = {
     timerStart: 0,
     timerInterval: 0,
     timerEnd: 0
 }
 
-
 var gGame = {
     revealedCells: 0,
     currentMines: 0,
     goal: 0,
-    levelSelected: intermediate,
+    levelSelected: levelsArray[1],
     isOn: false
 }
 
@@ -61,38 +59,13 @@ function onInit() {
     renderBoard(gBoard)
 }
 
-// event listener loop for when user changes difficulty settings
-elDifficultySetting.forEach(radio => {
-    radio.addEventListener('change', function () {
-
-        // captures new difficulty value
-        const difficultySTR = this.value
-
-        // loops on difficulties array
-        for (var i = 0; i < levelsArray.length; i++) {
-
-            // changes global difficulty value and relaunch game
-            if (levelsArray[i].name === difficultySTR) {
-                gGame.levelSelected = levelsArray[i]
-                onInit()
-                document.querySelector('.difficulty-settings-container').classList.add('hidden')
-                document.querySelector('.helpers-box').classList.add('hidden')
-                break
-            }
-        }
-    })
-})
-
-function handleVictory() {
-    // sends appropriate boolian to end game function
-    handleGameEnd(true)
+// resets game on difficulty change
+function changeDifficulty(difficultyValue) {
+    gGame.levelSelected = levelsArray[difficultyValue]
+    onInit()
 }
 
-function handleDefeat() {
-    // sends appropriate boolian to end game function
-    handleGameEnd(false)
-}
-
+// victory/defeat function, gets a boolian
 function handleGameEnd(win) {
     // updates model
     gGame.isOn = false

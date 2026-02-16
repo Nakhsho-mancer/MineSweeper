@@ -1,16 +1,9 @@
 'use strict'
 
-// DOM consts for user selected helpers
-const elLivesCheck = document.getElementById('lives-helper')
-const elHintsCheck = document.getElementById('hints-helper')
-const elSafeClicksCheck = document.getElementById('safeClicks-helper')
-const elExterminatorCheck = document.getElementById('exterminator-helper')
-
 // global helpers variable
 var gHelpers = {
     lives: 3,
-    safeClicks: 3,
-    megaHint: 1,
+    safeClicks: 3
 }
 
 // global helpers boolians
@@ -22,39 +15,59 @@ var gHelpersBoolians = {
     megaHint: true
 }
 
-// event listeners for helpers
-elLivesCheck.addEventListener('change', function () {
-    if (this.checked) gHelpersBoolians.lives = true
-    else gHelpersBoolians.lives = false
-    onInit()
-})
+function handleHelperCheckbox(event, helperID) {
+    switch (helperID) {
+        case "lives":
+            gHelpersBoolians.lives = (event.target.checked ? true : false)
+            onInit()
+            break
 
-elHintsCheck.addEventListener('change', function () {
-    if (this.checked) gHelpersBoolians.hints = true
-    else gHelpersBoolians.hints = false
-    onInit()
-})
+        case "hints":
+            gHelpersBoolians.hints = (event.target.checked ? true : false)
+            onInit()
+            break
 
-elSafeClicksCheck.addEventListener('change', function () {
-    if (this.checked) gHelpersBoolians.safeClicks = true
-    else gHelpersBoolians.safeClicks = false
-    onInit()
-})
+        case "safeClicks":
+            gHelpersBoolians.safeClicks = (event.target.checked ? true : false)
+            onInit()
+            break
 
-elExterminatorCheck.addEventListener('change', function () {
-    if (this.checked) gHelpersBoolians.exterminator = true
-    else gHelpersBoolians.exterminator = false
-    onInit()
-})
+        case "exterminator":
+            gHelpersBoolians.exterminator = (event.target.checked ? true : false)
+            onInit()
+            break
+
+        case "megaHint":
+            gHelpersBoolians.megaHint = (event.target.checked ? true : false)
+            onInit()
+            break
+
+        case "deselect":
+            const bool = (event.target.checked ? false : true)
+            const elHelpers = document.getElementsByName('helpers')
+            for (var i = 0; i < Object.keys(gHelpersBoolians).length; i++) {
+                gHelpersBoolians[Object.keys(gHelpersBoolians)[i]] = bool
+                elHelpers[i].checked = bool
+            }
+            onInit()
+            break
+    }
+}
 
 function resetHelpers() {
     // resets helpers model elements
-    gHelpers.lives = (gHelpersBoolians.lives ? 3 : 1)
+    gHelpers.lives = (!gHelpersBoolians.lives ? 1 : (gGame.levelSelected === easy) ? 2 : 3)
+    gHintClick = false
     gHelpers.safeClicks = (gHelpersBoolians.safeClicks ? 3 : 0)
-    if (gHelpersBoolians.exterminator) document.querySelector('.exterminator').classList.remove('hidden')
-    else document.querySelector('.exterminator').classList.add('hidden')
+    gMegaHintClick = 0
+    gMegaArray = []
 
     // resets helpers DOM
+    if (gHelpersBoolians.exterminator) document.querySelector('.exterminator').classList.remove('hidden')
+    else document.querySelector('.exterminator').classList.add('hidden')
+    if (gHelpersBoolians.megaHint) document.querySelector('.mega-hint').classList.remove('hidden')
+    else document.querySelector('.mega-hint').classList.add('hidden')
+
     updtaeLives()
     resetHints()
     renderSafeBtn()
@@ -65,7 +78,9 @@ function handleSafeClick() {
     if (!gGame.isOn || !gGame.revealedCells || !gHelpers.safeClicks) return
 
     // gets random indexes
-    const currCell = getRandomCell()
+    const i = getRandomInt(0, gBoard.length)
+    const j = getRandomInt(0, gBoard[0].length)
+    const currCell = gBoard[i][j]
 
     // conditions for appropriate cell
     if (currCell.isMine || currCell.isFlagged || currCell.isRevealed) return handleSafeClick()
@@ -100,7 +115,7 @@ function renderSafeBtn() {
 
 function updtaeLives() {
     // checks losing condition
-    if (gHelpers.lives === 0) handleDefeat()
+    if (gHelpers.lives === 0) handleGameEnd(false)
 
     // capture DOM element and updates according to model count
     const elLives = document.querySelector('.lives')
@@ -109,7 +124,7 @@ function updtaeLives() {
 
 function handleHint(elHintBtn) {
     // conditions to make sure clicks are appropriate
-    if (!gGame.isOn || !gGame.revealedCells || gHintClick) return
+    if (!gGame.isOn || !gGame.revealedCells || gHintClick || gMegaHintClick) return
 
     // applies special click action
     gHintClick = true
@@ -177,7 +192,6 @@ function resetHints() {
         const hint = document.querySelector(`.hint${i}`)
 
         // reset it
-        hint.innerText = HINT
         hint.classList.remove('hidden')
     }
 }
@@ -187,15 +201,23 @@ function handleExterminator(elExterBtn) {
     if (!gGame.isOn || !gGame.revealedCells || gGame.currentMines < 4) return
 
     // loops for random cells until it captures 3 mines
-    for (var i = 0; i < 3; i++) {
-        const currCell = getRandomCell()
+    for (var k = 0; k < 3; k++) {
+        const i = getRandomInt(0, gBoard.length)
+        const j = getRandomInt(0, gBoard[0].length)
+        const currCell = gBoard[i][j]
 
         if (!currCell.isMine) {
-            i--
+            k--
             continue
         }
-
         else currCell.isMine = false
+
+        if (currCell.isFlagged) {
+            currCell.isFlagged = false
+            currCell.isRevealed = true
+            document.querySelector(`[data-row="${i}"][data-col="${j}"]`).innerText = ''
+            document.querySelector(`[data-row="${i}"][data-col="${j}"]`).classList.add('revealed-cell')
+        }
         // when it finds mine updates victory condition if revealed
         if (currCell.isRevealed) gGame.revealedCells++
     }
@@ -206,12 +228,12 @@ function handleExterminator(elExterBtn) {
     updateNeighborCount(gBoard)
 
     // loops the board to update revealed cells DOM
-    for (var i = 0; i < gBoard.length; i++) {
+    for (var k = 0; k < gBoard.length; k++) {
         for (var j = 0; j < gBoard[0].length; j++) {
-            const currCell = gBoard[i][j]
+            const currCell = gBoard[k][j]
 
             if (currCell.isRevealed && !currCell.isMine) {
-                const elCell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`)
+                const elCell = document.querySelector(`[data-row="${k}"][data-col="${j}"]`)
                 elCell.innerText = (currCell.neighboringMines ? currCell.neighboringMines : '')
                 elCell.classList.add('revealed-cell')
                 elCell.classList.remove('clicked-mine')
@@ -221,4 +243,75 @@ function handleExterminator(elExterBtn) {
     // normal updates to DOM
     updateMinesLeft()
     elExterBtn.classList.add('hidden')
+}
+
+function handleMegaHint(elMegaBtn) {
+    // exit conditions
+    if (!gGame.isOn || !gGame.revealedCells || gHintClick) return
+
+    // sets special clicks condition
+    gMegaHintClick = 2
+
+    // updates DOM button
+    elMegaBtn.classList.add('hidden')
+}
+
+function renderMega(megaArray) {
+    // variables to capture indexes from array
+    var rowStart
+    var rowEnd
+    var colStart
+    var colEnd
+
+    // conditions to set start and end indexes
+    if (megaArray[0].i < megaArray[1].i) {
+        rowStart = megaArray[0].i
+        rowEnd = megaArray[1].i
+    }
+    else {
+        rowStart = megaArray[1].i
+        rowEnd = megaArray[0].i
+    }
+    if (megaArray[0].j < megaArray[1].j) {
+        colStart = megaArray[0].j
+        colEnd = megaArray[1].j
+    }
+    else {
+        colStart = megaArray[1].j
+        colEnd = megaArray[0].j
+    }
+
+    // loop reveal
+    for (var i = rowStart; i <= rowEnd; i++) {
+        for (var j = colStart; j <= colEnd; j++) {
+            const currCell = gBoard[i][j]
+
+            // continue conditions
+            if (currCell.isFlagged) continue
+            if (currCell.isRevealed) continue
+
+            // updates DOM only
+            const elCell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`)
+            elCell.classList.add('revealed-cell')
+            elCell.innerText =
+                (currCell.isMine ? BOOM : currCell.neighboringMines ? currCell.neighboringMines : '')
+
+        }
+    }
+
+    // timeout to reverse reveal
+    setTimeout(() => {
+        for (var i = rowStart; i <= rowEnd; i++) {
+            for (var j = colStart; j <= colEnd; j++) {
+                const currCell = gBoard[i][j]
+
+                if (currCell.isFlagged) continue
+                if (currCell.isRevealed) continue
+
+                const elCell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`)
+                elCell.classList.remove('revealed-cell')
+                elCell.innerText = ''
+            }
+        }
+    }, 2000)
 }

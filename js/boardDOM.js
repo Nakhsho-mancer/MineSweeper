@@ -4,8 +4,6 @@
 const BOOM = "💣"
 const FLAG = "🏴‍☠️"
 const WRONG = "❌"
-const HINT = "💡"
-const EXTERMINATOR = "🔥"
 
 function renderBoard(board) {
     // renders the board from the global board array

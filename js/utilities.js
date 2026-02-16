@@ -1,7 +1,7 @@
 'use strict'
 
-// I needed neighbors loop for multiple other functions so I 
-// just made this general function that returns array of indexes
+// I needed neighbors loop for multiple functions so I 
+// made this general function that returns array of indexes
 function returnNeighborsIndexes(rowIdx, colIdx) {
 
     const res = []
