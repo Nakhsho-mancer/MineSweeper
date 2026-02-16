@@ -5,6 +5,7 @@ const BOOM = "💣"
 const FLAG = "🏴‍☠️"
 const WRONG = "❌"
 const HINT = "💡"
+const EXTERMINATOR = "🔥"
 
 function renderBoard(board) {
     // renders the board from the global board array
@@ -31,8 +32,6 @@ function renderBoard(board) {
     elContainter.innerHTML = strHTML
 
     updateMinesLeft()
-    updtaeLives()
-    resetHints()
 }
 
 function renderEndBoard() {
@@ -62,61 +61,7 @@ function updateMinesLeft() {
     elMinesLeft.innerText = gGame.currentMines
 }
 
-function resetHints() {
-    // loop 3 times for hints
-    for (var i = 1; i <= 3; i++) {
-        // capture DOM element
-        const hint = document.querySelector(`.hint${i}`)
-
-        // reset it
-        hint.classList.remove('hidden')
-        hint.innerText = HINT
-    }
-}
-
 function settingsBtn() {
-    document.querySelector('.settings-container').classList.toggle('hidden')
-}
-
-function timedReveal(rowIdx, colIdx) {
-    const neighborsArray = returnNeighborsIndexes(rowIdx, colIdx)
-    // pushes original cell into array since no model changes are using it
-    neighborsArray.push({ i: rowIdx, j: colIdx })
-
-    // neighbors loop
-    for (var k = 0; k < neighborsArray.length; k++) {
-        const currI = neighborsArray[k].i
-        const currJ = neighborsArray[k].j
-        const currCell = gBoard[currI][currJ]
-
-        // continue conditions
-        if (currCell.isFlagged) continue
-        if (currCell.isRevealed) continue
-
-        // updates DOM only, checking both mines and normal cells
-        const elCell = document.querySelector(`[data-row="${currI}"][data-col="${currJ}"]`)
-        elCell.classList.toggle('revealed-cell')
-        elCell.innerText =
-            (currCell.isMine ? BOOM :
-                currCell.neighboringMines ? currCell.neighboringMines : '')
-    }
-
-    // timeout to revert DOM changes
-    setTimeout(() => {
-        for (var k = 0; k < neighborsArray.length; k++) {
-            const currI = neighborsArray[k].i
-            const currJ = neighborsArray[k].j
-            const currCell = gBoard[currI][currJ]
-
-            // continue conditions
-            if (currCell.isFlagged) continue
-            if (currCell.isRevealed) continue
-
-            // updates DOM
-            const elCell = document.querySelector(`[data-row="${currI}"][data-col="${currJ}"]`)
-            elCell.classList.toggle('revealed-cell')
-            elCell.innerText = ''
-        }
-    }, 1500)
-    gHintClick = false
+    document.querySelector('.difficulty-settings-container').classList.toggle('hidden')
+    document.querySelector('.helpers-box').classList.toggle('hidden')
 }

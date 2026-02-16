@@ -1,14 +1,12 @@
-html,
 body {
     text-align: center;
-    background-image: radial-gradient(ellipse,
-            #ec2c2cef 10%, #f7f445e5 30%, #ff9a2e 60%);
+    color: rgba(242, 204, 233, 0.902);
+    background-image: url("../images/battlefield.jpg");
     background-repeat: no-repeat;
-    height: 100%;
-    background-size: cover;
     background-position: center;
-    margin: 0;
-    padding: 0;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
 .board-container {
@@ -19,19 +17,23 @@ body {
 }
 
 table {
+    border-collapse: collapse;
     border: 5px solid black;
     padding: 5px;
 }
 
 .cell {
+    color: rgb(249, 247, 116);
     cursor: default;
     background-color: darkcyan;
     font-size: 120%;
     font-weight: bold;
     height: 30px;
     width: 30px;
-    padding: 0;
-    margin: 0;
+    box-sizing: content-box;
+    border-style: outset;
+    padding: none;
+    margin: none;
     user-select: none;
 }
 
@@ -39,6 +41,10 @@ table {
     background-color: cadetblue;
 }
 
+.safe-mark {
+    border: 4px solid rgb(255, 0, 43);
+    box-sizing: border-box;
+}
 
 .hidden {
     display: none;
@@ -57,7 +63,8 @@ table {
     left: 0%;
 }
 
-.settings {
+.difficulty-settings {
+    color: black;
     position: absolute;
     left: 40%;
     text-align: left;
@@ -65,9 +72,15 @@ table {
     user-select: none;
 }
 
-.settings-container {
+.difficulty-settings-container {
     background-color: rgb(209, 162, 61);
     border: 5px solid black;
+}
+
+.helpers-box {
+    background-color: rgb(144, 228, 189);
+    border: 5px solid black;
+    position: relative;
 }
 
 .settingsBtn {

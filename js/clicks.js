@@ -56,7 +56,7 @@ function cellClick(elCell, i, j) {
     if (modelCell.isMine) {
         // update model mines and lives
         gGame.currentMines--
-        gGame.livesLeft--
+        gHelpers.lives--
 
         updateMinesLeft()
         updtaeLives()
@@ -90,7 +90,7 @@ function cellClick(elCell, i, j) {
 }
 
 function cellFlagged(elCell, i, j) {
-    if (!gGame.isOn) return
+    if (!gGame.isOn || !gGame.revealedCells) return
 
     // capture model element
     const modelCell = gBoard[i][j]

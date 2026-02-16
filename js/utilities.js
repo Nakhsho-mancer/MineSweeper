@@ -34,7 +34,7 @@ function updateTimer() {
     // variables to make time passed legible
     var timerMins = Math.floor(gTimer.timerEnd / 60000).toString()
     if (timerMins.length === 1) timerMins = '0' + timerMins
-    var timerSecs = Math.floor((gTimer.timerEnd / 1000)%60).toString()
+    var timerSecs = Math.floor((gTimer.timerEnd / 1000) % 60).toString()
     if (timerSecs.length === 1) timerSecs = '0' + timerSecs
     var timerMillis = Math.floor(gTimer.timerEnd % 1000).toString()
     if (timerMillis.length === 1) timerMillis = '00' + timerMillis
@@ -42,6 +42,13 @@ function updateTimer() {
 
     // updates DOM
     elTimer.innerText = `${timerMins}:${timerSecs}:${timerMillis}`
+}
+
+function getRandomCell() {
+    const i = getRandomInt(0, gBoard.length)
+    const j = getRandomInt(0, gBoard[0].length)
+
+    return gBoard[i][j]
 }
 
 function getRandomInt(min, max) {

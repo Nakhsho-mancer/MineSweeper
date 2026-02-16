@@ -31,7 +31,6 @@ var gGame = {
     revealedCells: 0,
     currentMines: 0,
     goal: 0,
-    livesLeft: 3,
     levelSelected: intermediate,
     isOn: false
 }
@@ -45,8 +44,8 @@ function onInit() {
     gGame.revealedCells = 0
     gGame.currentMines = gGame.levelSelected.mines
     gGame.goal = gGame.levelSelected.rows * gGame.levelSelected.columns - gGame.levelSelected.mines
-    gGame.livesLeft = 3
     gGame.isOn = true
+    resetHelpers()
 
     // resets timer
     gTimer.timerStart = 0
@@ -67,16 +66,17 @@ elDifficultySetting.forEach(radio => {
     radio.addEventListener('change', function () {
 
         // captures new difficulty value
-        const diffStr = this.value
+        const difficultySTR = this.value
 
         // loops on difficulties array
         for (var i = 0; i < levelsArray.length; i++) {
 
             // changes global difficulty value and relaunch game
-            if (levelsArray[i].name === diffStr) {
+            if (levelsArray[i].name === difficultySTR) {
                 gGame.levelSelected = levelsArray[i]
                 onInit()
-                document.querySelector('.settings-container').classList.add('hidden')
+                document.querySelector('.difficulty-settings-container').classList.add('hidden')
+                document.querySelector('.helpers-box').classList.add('hidden')
                 break
             }
         }
@@ -119,7 +119,7 @@ function firstClick(elCell, i, j) {
     modelCell.isRevealed = true
 
     // builds around it
-    placeMines(gBoard, gGame.levelSelected.mines)
+    placeMines(gGame.levelSelected.mines)
     updateNeighborCount(gBoard)
 
     // if the cell was "0" calls revealing function

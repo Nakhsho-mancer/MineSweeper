@@ -14,18 +14,31 @@
 
     <h2 class="mines-remaining">Mines left: <span></span></h2>
     <h2><span class="timer">00:00:000</span> | Lives left: <span class="lives"></span></h2>
-    <h2 class="hints"> Hints:
-        <button class="hint1" onclick="handleHint(this)">💡</button>
-        <button class="hint2" onclick="handleHint(this)">💡</button>
-        <button class="hint3" onclick="handleHint(this)">💡</button>
-    </h2>
+
+    <div class="helpers-container">
+
+        <h2 class="hints"> Hints:
+            <button class="hint1" onclick="handleHint(this)">💡</button>
+            <button class="hint2" onclick="handleHint(this)">💡</button>
+            <button class="hint3" onclick="handleHint(this)">💡</button>
+        </h2>
+
+        <button class="safe-clicks" onclick="handleSafeClick()">
+            Safe<br>clicks: <span></span>
+        </button>
+
+        <button class="exterminator" onclick="handleExterminator(this)">🔥</button>
+    </div>
 
     <div class="end-modal hidden"></div>
 
     <div class="utility-buttons">
-        <div class="settings">
+
+        <div class="difficulty-settings">
+
             <button class="settingsBtn" onclick="settingsBtn()">⚙️</button>
-            <div class="settings-container hidden">
+            <div class="difficulty-settings-container hidden">
+
                 <fieldset>
                     <legend>Select difficulty:</legend>
 
@@ -46,6 +59,28 @@
                         <label for="expert">Wise Elder</label>
                     </div>
             </div>
+
+            <div class="helpers-box hidden">
+                <fieldset>
+                    <legend>Mark helpers</legend>
+                    <div>
+                        <input type="checkbox" id="lives-helper" name="helpers" checked>
+                        <label for="lives-helper">Extra lives</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hints-helper" name="helpers" checked>
+                        <label for="hints-helper">Hints to reveal small area</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="safeClicks-helper" name="helpers" checked>
+                        <label for="safeClicks-helper">Safe unrevealed cell </label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="exterminator-helper" name="helpers" checked>
+                        <label for="exterminator-helper">Destroy 3 random mines </label>
+                    </div>
+                </fieldset>
+            </div>
         </div>
 
         <button class="restart-button" onclick="onInit()"></button>
@@ -59,6 +94,7 @@
     <script src="js/boardDOM.js"></script>
     <script src="js/boardModel.js"></script>
     <script src="js/clicks.js"></script>
+    <script src="js/helpers.js"></script>
     <script src="js/utilities.js"></script>
 </body>
 

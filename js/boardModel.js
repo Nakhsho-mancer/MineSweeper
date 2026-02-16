@@ -50,19 +50,16 @@ function updateNeighborCount(board) {
     }
 }
 
-function placeMines(board, mines) {
+function placeMines(mines) {
     // loops mine count
     for (var i = 0; i < mines; i++) {
-        const rowIdx = getRandomInt(0, board.length)
-        const colIdx = getRandomInt(0, board[0].length)
+        const currCell = getRandomCell()
 
         // retry the step if it caught an already existing mine
-        if (board[rowIdx][colIdx].isMine || board[rowIdx][colIdx].isRevealed) i--
+        if (currCell.isMine || currCell.isRevealed) i--
 
         // updates model
-        else {
-            board[rowIdx][colIdx].isMine = true
-        }
+        else currCell.isMine = true
     }
 }
 
@@ -78,24 +75,4 @@ function countMinesAround(rowIdx, colIdx) {
     }
 
     return minesAround
-}
-
-function updtaeLives() {
-    // checks losing condition
-    if (gGame.livesLeft === 0) handleDefeat()
-
-    // capture DOM element and updates according to model count
-    const elLives = document.querySelector('.lives')
-    elLives.innerText = gGame.livesLeft
-}
-
-function handleHint(elHintBtn) {
-    // conditions to make sure clicks are appropriate
-    if (!gGame.isOn || !gGame.revealedCells || gHintClick) return
-
-    // applies special click action
-    gHintClick = true
-
-    // updates DOM
-    elHintBtn.classList.add('hidden')
 }
