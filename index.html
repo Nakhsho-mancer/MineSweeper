@@ -18,18 +18,23 @@
     <div class="helpers-container">
 
         <h2 class="hints"> Hints:
-            <button class="hint1" onclick="handleHint(this)">💡</button>
-            <button class="hint2" onclick="handleHint(this)">💡</button>
-            <button class="hint3" onclick="handleHint(this)">💡</button>
+            <button class="hint1" onclick="handleHint(this)"
+                title="Click an urevealed cell to temporarily show it and its' neighboring cells">💡</button>
+            <button class="hint2" onclick="handleHint(this)"
+                title="Click an urevealed cell to temporarily show it and its' neighboring cells">💡</button>
+            <button class="hint3" onclick="handleHint(this)"
+                title="Click an urevealed cell to temporarily show it and its' neighboring cells">💡</button>
         </h2>
 
-        <button class="safe-clicks" onclick="handleSafeClick()">
-            Safe<br>clicks: <span></span>
+        <button class="safe-clicks" onclick="handleSafeClick()" title="Marks an unrevealed safe cell to click on">
+            🛡️: <span></span>
         </button>
 
-        <button class="exterminator" onclick="handleExterminator(this)">🔥</button>
+        <button class="exterminator" onclick="handleExterminator(this)"
+            title="Destroys 3 randmoly selected mines, single use">🔥</button>
 
-        <button class="mega-hint" onclick="handleMegaHint(this)">🤖</button>
+        <button class="mega-hint" onclick="handleMegaHint(this)"
+            title="Click on 2 cells to temporarily reveal the entire area between them, single use">🤖</button>
     </div>
 
     <div class="end-modal hidden"></div>
@@ -62,11 +67,25 @@
                             onchange="changeDifficulty(value)" />
                         <label for="expert">Wise Elder</label>
                     </div>
+                    <div>
+                        <input type="radio" id="manual" name="difficulty" value="4"
+                            onchange="changeDifficulty(value)" />
+                        <label for="expert">Manual mode<br></label>
+                        <label for="manual-rows">number of rows: </label>
+                        <input type="number" id="manual-rows" onchange="handleManualDifficulty()"
+                            class="manual-difficulty" />
+                        <label for="manual-columns"><br>number of columns: </label>
+                        <input type="number" id="manual-columns" onchange="handleManualDifficulty()"
+                            class="manual-difficulty" />
+                        <label for="manual-mines"><br>number of mines: </label>
+                        <input type="number" id="manual-mines" onchange="handleManualDifficulty()"
+                            class="manual-difficulty" />
+                    </div>
             </div>
 
             <div class="helpers-box hidden">
                 <fieldset>
-                    <legend>Choose helpers</legend>
+                    <legend>Choose helpers (hover over them for explainations)</legend>
 
                     <div>
                         <input type="checkbox" id="lives-helper" name="helpers" checked
@@ -91,10 +110,10 @@
                     <div>
                         <input type="checkbox" id="mega-hint-helper" name="helpers" checked
                             onchange="handleHelperCheckbox(event, 'megaHint')">
-                        <label for="mega-hint-helper">Reveals large area by clicks</label>
+                        <label for="mega-hint-helper">Reveals large area</label>
                     </div>
                     <div>
-                        <input type="checkbox" id="deselect-all" name="helpers" 
+                        <input type="checkbox" id="deselect-all" name="helpers"
                             onchange="handleHelperCheckbox(event, 'deselect')">
                         <label for="deselect-all">No help at all </label>
                     </div>
@@ -102,12 +121,13 @@
             </div>
         </div>
 
-        <button class="restart-button" onclick="onInit()"></button>
+        <button class="restart-button" onclick="onInit()" title="Restart"></button>
     </div>
 
 
     <div class="board-container dont-click"></div>
 
+    <div class="high-scores-box"></div>
 
     <script src="js/main.js"></script>
     <script src="js/boardDOM.js"></script>

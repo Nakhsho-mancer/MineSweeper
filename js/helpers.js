@@ -15,36 +15,46 @@ var gHelpersBoolians = {
     megaHint: true
 }
 
+// handles checkbox DOM elements
 function handleHelperCheckbox(event, helperID) {
+    const elHelpers = document.getElementsByName('helpers')
+
+    // each case toggles appropriate model boolian
     switch (helperID) {
         case "lives":
             gHelpersBoolians.lives = (event.target.checked ? true : false)
+            if (gHelpersBoolians.lives) elHelpers[5].checked = false
             onInit()
             break
 
         case "hints":
             gHelpersBoolians.hints = (event.target.checked ? true : false)
+            if (gHelpersBoolians.hints) elHelpers[5].checked = false
             onInit()
             break
 
         case "safeClicks":
             gHelpersBoolians.safeClicks = (event.target.checked ? true : false)
+            if (gHelpersBoolians.safeClicks) elHelpers[5].checked = false
             onInit()
             break
 
         case "exterminator":
             gHelpersBoolians.exterminator = (event.target.checked ? true : false)
+            if (gHelpersBoolians.exterminator) elHelpers[5].checked = false
             onInit()
             break
 
         case "megaHint":
             gHelpersBoolians.megaHint = (event.target.checked ? true : false)
+            if (gHelpersBoolians.megaHint) elHelpers[5].checked = false
             onInit()
             break
 
+            // deselect button stores a local boolian correlated to its checkbox 
+            // then loops on model boolians and DOM checkboxes  
         case "deselect":
             const bool = (event.target.checked ? false : true)
-            const elHelpers = document.getElementsByName('helpers')
             for (var i = 0; i < Object.keys(gHelpersBoolians).length; i++) {
                 gHelpersBoolians[Object.keys(gHelpersBoolians)[i]] = bool
                 elHelpers[i].checked = bool

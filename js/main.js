@@ -5,7 +5,8 @@ const levelsArray = [
     { name: 'easy', rows: 4, columns: 4, mines: 2 },
     { name: 'intermediate', rows: 9, columns: 9, mines: 10 },
     { name: 'hard', rows: 16, columns: 16, mines: 40 },
-    { name: 'expert', rows: 16, columns: 30, mines: 99 }
+    { name: 'expert', rows: 16, columns: 30, mines: 99 },
+    { name: 'manual', rows: 0, columns: 0, mines: 0 }
 ]
 
 // new game icons
@@ -61,8 +62,37 @@ function onInit() {
 
 // resets game on difficulty change
 function changeDifficulty(difficultyValue) {
+
     gGame.levelSelected = levelsArray[difficultyValue]
+    if (gGame.levelSelected === levelsArray[4]) {
+        handleManualDifficulty()
+    }
     onInit()
+
+    // rehide settings box (as long as manual box isn't still changed by user)
+    if ((difficultyValue !== '4') || (gGame.levelSelected === levelsArray[4])) {
+        document.querySelector('.difficulty-settings-container').classList.add('hidden')
+        document.querySelector('.helpers-box').classList.add('hidden')
+    }
+}
+
+function handleManualDifficulty() {
+    // gets user's desired values
+    const elRows = document.getElementById('manual-rows').value
+    const elCols = document.getElementById('manual-columns').value
+    const elMines = document.getElementById('manual-mines').value
+
+    // makes sure they're valid, otherwise reselects 'default'
+    if (elRows < 1 || elRows > 99 || elCols < 1 || elCols > 99 || elMines >= (elRows * elCols - 1)) {
+        gGame.levelSelected = levelsArray[1]
+        document.getElementById('intermediate').checked = true
+        return
+    }
+
+    // updates model
+    levelsArray[4].rows = elRows
+    levelsArray[4].columns = elCols
+    levelsArray[4].mines = elMines
 }
 
 // victory/defeat function, gets a boolian

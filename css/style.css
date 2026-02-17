@@ -96,3 +96,11 @@ table {
     margin-bottom: 5px;
     user-select: none;
 }
+
+.manual-difficulty{
+    width: 60px;
+    height: 20px;
+    padding: 5px 10px;
+    border: 2px solid #ccc;
+    box-sizing: border-box;
+}
