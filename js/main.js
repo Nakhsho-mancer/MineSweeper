@@ -130,15 +130,15 @@ function firstClick(elCell, i, j) {
         recursiveReveal(i, j)
 
         // updates DOM
-        elCell.classList.add('revealed-cell')
         elCell.innerText = ''
     }
 
     else {
-        elCell.classList.add('revealed-cell')
+        
         elCell.innerText = modelCell.neighboringMines
     }
 
+    elCell.classList.add('revealed-cell')
     // starts the timer
     startTimer()
 }

@@ -113,7 +113,7 @@ function cellFlagged(elCell, i, j) {
     // exit condition
     if (modelCell.isRevealed) return
 
-    // switch back from existing flag and apply to model
+    // toggle existing flag and apply to model
     modelCell.isFlagged = !modelCell.isFlagged
     gGame.currentMines = (modelCell.isFlagged ? gGame.currentMines - 1 : gGame.currentMines + 1)
 
@@ -162,13 +162,24 @@ function recursiveReveal(rowIdx, colIdx) {
 
         // updates model
         currCell.isRevealed = true
-        gGame.revealedCells++
+        
+        if (currCell.isMine) {
+            gGame.currentMines--
+            gHelpers.lives--
+
+            updateMinesLeft()
+            updtaeLives()
+        }
+        else gGame.revealedCells++
 
         // updates DOM
         const elCell = document.querySelector(`[data-row="${currI}"][data-col="${currJ}"]`)
         elCell.classList.add('revealed-cell')
-        elCell.innerText = (currCell.neighboringMines ? currCell.neighboringMines : '')
-
+        if (currCell.isMine) {
+            elCell.innerText = BOOM
+            elCell.classList.add('clicked-mine')
+        }
+        else elCell.innerText = (currCell.neighboringMines ? currCell.neighboringMines : '')
         // checks other "0" cells for expanded area reveal and victory condition
         if (!currCell.neighboringMines) recursiveReveal(currI, currJ)
         if (gGame.revealedCells === gGame.goal) handleGameEnd(true)
