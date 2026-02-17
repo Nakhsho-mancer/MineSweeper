@@ -51,8 +51,8 @@ function handleHelperCheckbox(event, helperID) {
             onInit()
             break
 
-            // deselect button stores a local boolian correlated to its checkbox 
-            // then loops on model boolians and DOM checkboxes  
+        // deselect button stores a local boolian correlated to its checkbox 
+        // then loops on model boolians and DOM checkboxes  
         case "deselect":
             const bool = (event.target.checked ? false : true)
             for (var i = 0; i < Object.keys(gHelpersBoolians).length; i++) {
@@ -78,7 +78,7 @@ function resetHelpers() {
     if (gHelpersBoolians.megaHint) document.querySelector('.mega-hint').classList.remove('hidden')
     else document.querySelector('.mega-hint').classList.add('hidden')
 
-    updtaeLives()
+    updateLives()
     resetHints()
     renderSafeBtn()
 }
@@ -123,8 +123,9 @@ function renderSafeBtn() {
         document.querySelector('.safe-clicks').classList.remove('hidden')
 }
 
-function updtaeLives() {
+function updateLives() {
     // checks losing condition
+    if (gHelpers.lives < 0) gHelpers.lives = 0
     if (gHelpers.lives === 0) handleGameEnd(false)
 
     // capture DOM element and updates according to model count

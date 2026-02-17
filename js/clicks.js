@@ -74,7 +74,7 @@ function cellClick(elCell, i, j) {
         gHelpers.lives--
 
         updateMinesLeft()
-        updtaeLives()
+        updateLives()
 
         // updates DOM
         elCell.innerText = BOOM
@@ -168,7 +168,7 @@ function recursiveReveal(rowIdx, colIdx) {
             gHelpers.lives--
 
             updateMinesLeft()
-            updtaeLives()
+            updateLives()
         }
         else gGame.revealedCells++
 
