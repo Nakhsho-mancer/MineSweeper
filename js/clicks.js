@@ -162,7 +162,7 @@ function recursiveReveal(rowIdx, colIdx) {
 
         // updates model
         currCell.isRevealed = true
-        
+
         if (currCell.isMine) {
             gGame.currentMines--
             gHelpers.lives--
@@ -180,8 +180,9 @@ function recursiveReveal(rowIdx, colIdx) {
             elCell.classList.add('clicked-mine')
         }
         else elCell.innerText = (currCell.neighboringMines ? currCell.neighboringMines : '')
+        
         // checks other "0" cells for expanded area reveal and victory condition
-        if (!currCell.neighboringMines) recursiveReveal(currI, currJ)
+        if (!currCell.neighboringMines && !currCell.isMine) recursiveReveal(currI, currJ)
         if (gGame.revealedCells === gGame.goal) handleGameEnd(true)
     }
 }

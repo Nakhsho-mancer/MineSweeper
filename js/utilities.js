@@ -31,17 +31,23 @@ function updateTimer() {
     // updates model and saves the time globaly for high scores to be added
     gTimer.timerEnd = currTime - gTimer.timerStart
 
+    const legibleTime = makeTimeLegible(gTimer.timerEnd)
+
+    // updates DOM
+    elTimer.innerText = legibleTime
+}
+
+function makeTimeLegible(illegibleTime) {
     // variables to make time passed legible
-    var timerMins = Math.floor(gTimer.timerEnd / 60000).toString()
+    var timerMins = Math.floor(illegibleTime / 60000).toString()
     if (timerMins.length === 1) timerMins = '0' + timerMins
-    var timerSecs = Math.floor((gTimer.timerEnd / 1000) % 60).toString()
+    var timerSecs = Math.floor((illegibleTime / 1000) % 60).toString()
     if (timerSecs.length === 1) timerSecs = '0' + timerSecs
-    var timerMillis = Math.floor(gTimer.timerEnd % 1000).toString()
+    var timerMillis = Math.floor(illegibleTime % 1000).toString()
     if (timerMillis.length === 1) timerMillis = '00' + timerMillis
     else if (timerMillis.length === 2) timerMillis = '0' + timerMillis
 
-    // updates DOM
-    elTimer.innerText = `${timerMins}:${timerSecs}:${timerMillis}`
+    return `${timerMins}:${timerSecs}:${timerMillis}`
 }
 
 function getRandomCell() {

@@ -115,7 +115,7 @@
                     <div>
                         <input type="checkbox" id="deselect-all" name="helpers"
                             onchange="handleHelperCheckbox(event, 'deselect')">
-                        <label for="deselect-all">No help at all </label>
+                        <label for="deselect-all">No help at all (for high scores)</label>
                     </div>
                 </fieldset>
             </div>
@@ -127,13 +127,91 @@
 
     <div class="board-container dont-click"></div>
 
-    <div class="high-scores-box"></div>
+    <div>
+        <table class="high-scores-box">
+            <tbody>
+                <tr>
+                    <td>
+                        <h2>High Scores</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Toddler:</td>
+                    <td>Teenager:</td>
+                    <td>Adult:</td>
+                    <td>Wise Elder:</td>
+                </tr>
+                <tr>
+                    <td class="HS-0_0">1. <span></span></td>
+                    <td class="HS-1_0">1. <span></span></td>
+                    <td class="HS-2_0">1. <span></span></td>
+                    <td class="HS-3_0">1. <span></span></td>
+                </tr>
+                <tr>
+                    <td class="HS-0_1">2. <span></span></td>
+                    <td class="HS-1_1">2. <span></span></td>
+                    <td class="HS-2_1">2. <span></span></td>
+                    <td class="HS-3_1">2. <span></span></td>
+                </tr>
+                <tr>
+                    <td class="HS-0_2">3. <span></span></td>
+                    <td class="HS-1_2">3. <span></span></td>
+                    <td class="HS-2_2">3. <span></span></td>
+                    <td class="HS-3_2">3. <span></span></td>
+                </tr>
+                <tr>
+                    <td class="HS-0_3">4. <span></span></td>
+                    <td class="HS-1_3">4. <span></span></td>
+                    <td class="HS-2_3">4. <span></span></td>
+                    <td class="HS-3_3">4. <span></span></td>
+                </tr>
+                <tr>
+                    <td class="HS-0_4">5. <span></span></td>
+                    <td class="HS-1_4">5. <span></span></td>
+                    <td class="HS-2_4">5. <span></span></td>
+                    <td class="HS-3_4">5. <span></span></td>
+                </tr>
+                <tr>
+                    <td class="HS-0_5">6. <span></span></td>
+                    <td class="HS-1_5">6. <span></span></td>
+                    <td class="HS-2_5">6. <span></span></td>
+                    <td class="HS-3_5">6. <span></span></td>
+                </tr>
+                <tr>
+                    <td class="HS-0_6">7. <span></span></td>
+                    <td class="HS-1_6">7. <span></span></td>
+                    <td class="HS-2_6">7. <span></span></td>
+                    <td class="HS-3_6">7. <span></span></td>
+                </tr>
+                <tr>
+                    <td class="HS-0_7">8. <span></span></td>
+                    <td class="HS-1_7">8. <span></span></td>
+                    <td class="HS-2_7">8. <span></span></td>
+                    <td class="HS-3_7">8. <span></span></td>
+                </tr>
+                <tr>
+                    <td class="HS-0_8">9. <span></span></td>
+                    <td class="HS-1_8">9. <span></span></td>
+                    <td class="HS-2_8">9. <span></span></td>
+                    <td class="HS-3_8">9. <span></span></td>
+                </tr>
+                <tr>
+                    <td class="HS-0_9">10. <span></span></td>
+                    <td class="HS-1_9">10. <span></span></td>
+                    <td class="HS-2_9">10. <span></span></td>
+                    <td class="HS-3_9">10. <span></span></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
 
     <script src="js/main.js"></script>
     <script src="js/boardDOM.js"></script>
     <script src="js/boardModel.js"></script>
     <script src="js/clicks.js"></script>
     <script src="js/helpers.js"></script>
+    <script src="js/scoreBoard.js"></script>
     <script src="js/utilities.js"></script>
 </body>
 

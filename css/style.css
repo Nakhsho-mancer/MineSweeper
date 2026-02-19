@@ -62,12 +62,13 @@ table {
 .utility-buttons {
     position: flex;
     left: 0%;
+    user-select: none;
 }
 
 .difficulty-settings {
     color: black;
     position: absolute;
-    left: 40%;
+    left: 35%;
     text-align: left;
     display: inline-block;
     user-select: none;
@@ -86,6 +87,7 @@ table {
 
 .settingsBtn {
     cursor: pointer;
+    user-select: none;
 }
 
 .restart-button {
@@ -97,10 +99,24 @@ table {
     user-select: none;
 }
 
-.manual-difficulty{
+.manual-difficulty {
     width: 60px;
     height: 20px;
     padding: 5px 10px;
     border: 2px solid #ccc;
     box-sizing: border-box;
+}
+
+.helpers-container {
+    user-select: none;
+}
+
+.high-scores-box {
+    background-color: rgb(250, 115, 239);
+    color: black;
+    display: flex;
+    text-align: center;
+    background-position: center;
+    align-items: center;
+    justify-content: center;
 }

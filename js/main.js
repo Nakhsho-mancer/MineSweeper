@@ -58,6 +58,9 @@ function onInit() {
 
     // renders DOM
     renderBoard(gBoard)
+
+    // gets local storage
+    getHighScoresStorage()
 }
 
 // resets game on difficulty change
@@ -100,7 +103,8 @@ function handleGameEnd(win) {
     // updates model
     gGame.isOn = false
     clearInterval(gTimer.timerInterval)
-
+    if (win && (gGame.levelSelected !== levelsArray[4])) handleHighScore(gGame.levelSelected)
+        
     // updates DOM
     renderEndBoard()
     elResetButton.innerText = (win ? SUN_GLASSES : SKULL)
@@ -134,7 +138,7 @@ function firstClick(elCell, i, j) {
     }
 
     else {
-        
+
         elCell.innerText = modelCell.neighboringMines
     }
 

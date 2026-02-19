@@ -76,3 +76,5 @@ function countMinesAround(rowIdx, colIdx) {
 
     return minesAround
 }
+
+function handleHighScore() { }
