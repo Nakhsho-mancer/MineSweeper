@@ -104,7 +104,7 @@ function handleGameEnd(win) {
     gGame.isOn = false
     clearInterval(gTimer.timerInterval)
     if (win && (gGame.levelSelected !== levelsArray[4])) handleHighScore(gGame.levelSelected)
-        
+
     // updates DOM
     renderEndBoard()
     elResetButton.innerText = (win ? SUN_GLASSES : SKULL)
@@ -143,6 +143,10 @@ function firstClick(elCell, i, j) {
     }
 
     elCell.classList.add('revealed-cell')
+
+    // condition for game "winning" on first click (low mines count boards or highly improbable random placements)
+    if (gGame.revealedCells === gGame.goal) handleGameEnd(false)
+
     // starts the timer
-    startTimer()
+    else startTimer()
 }
