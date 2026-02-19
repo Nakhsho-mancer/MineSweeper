@@ -14,10 +14,14 @@ var gMegaArray = []
 // disables right click menu
 elContainter.addEventListener('contextmenu', event => event.preventDefault())
 
+// event listener instead of "click calls" from HTML to handle multiple situations
 elContainter.addEventListener('mousedown', event => {
     // consts to capture DOM element and relevant indexes
     const elCell = event.target
+
+    // condition to ignore space between cells or "out of bound" clicks
     if (elCell.classList.contains('dont-click')) return
+
     const cellRowIdx = +elCell.dataset.row
     const cellColIdx = +elCell.dataset.col
 
@@ -28,10 +32,10 @@ elContainter.addEventListener('mousedown', event => {
     // direct to appropriate function
     if (gLeftClick && !gRightClick) cellClick(elCell, cellRowIdx, cellColIdx)
     if (!gLeftClick && gRightClick) cellFlagged(elCell, cellRowIdx, cellColIdx)
-    if (gLeftClick && gRightClick) rightAndLeftClick(cellRowIdx, cellColIdx)
+    if (gLeftClick && gRightClick) leftAndRightClick(cellRowIdx, cellColIdx)
 })
 
-// reverts boolians
+// reverts boolians on mouse release
 elContainter.addEventListener('mouseup', event => {
     if (event.button === 0) gLeftClick = false
     if (event.button === 2) gRightClick = false
@@ -64,7 +68,6 @@ function cellClick(elCell, i, j) {
         return
     }
 
-
     // update model
     modelCell.isRevealed = true
 
@@ -72,13 +75,14 @@ function cellClick(elCell, i, j) {
         // update model mines and lives
         gGame.currentMines--
         gHelpers.lives--
-
-        updateMinesLeft()
-        updateLives()
-
+        
         // updates DOM
         elCell.innerText = BOOM
         elCell.classList.add('clicked-mine')
+
+        // calls appopriate functions
+        updateMinesLeft()
+        updateLives()
     }
 
     // if the cell is "safe"
@@ -99,39 +103,38 @@ function cellClick(elCell, i, j) {
         elCell.classList.add('revealed-cell')
         elCell.innerText = (modelCell.neighboringMines ? modelCell.neighboringMines : '')
 
-        // if the cell was "0" calls revealing function
+        // if the cell was "0" calls recursive revealing function
         if (!modelCell.neighboringMines) recursiveReveal(i, j)
     }
 }
 
 function cellFlagged(elCell, i, j) {
-    if (!gGame.isOn || !gGame.revealedCells) return
-
     // capture model element
     const modelCell = gBoard[i][j]
 
-    // exit condition
-    if (modelCell.isRevealed) return
+    // exit conditions
+    if (!gGame.isOn || !gGame.revealedCells || modelCell.isRevealed) return
 
     // toggle existing flag and apply to model
     modelCell.isFlagged = !modelCell.isFlagged
-    gGame.currentMines = (modelCell.isFlagged ? gGame.currentMines - 1 : gGame.currentMines + 1)
+    gGame.currentMines = (modelCell.isFlagged ? gGame.currentMines -= 1 : gGame.currentMines += 1)
 
     // updates DOM
     elCell.innerText = (modelCell.isFlagged ? FLAG : '')
     updateMinesLeft()
 }
 
-function rightAndLeftClick(i, j) {
+function leftAndRightClick(i, j) {
+    // exit conditions
     if (!gGame.isOn || gHintClick || gMegaHintClick) return
 
     // capture model element
     const modelCell = gBoard[i][j]
 
-    // exit conditions
+    // more exit conditions :-)
     if (!modelCell.isRevealed || modelCell.isFlagged) return
 
-    // variable and neighbors loop for currect simultaneous click logic
+    // variable and neighbors loop for correct simultaneous click logic
     var flagsAround = 0
     const neighborsArray = returnNeighborsIndexes(i, j)
 
@@ -163,6 +166,7 @@ function recursiveReveal(rowIdx, colIdx) {
         // updates model
         currCell.isRevealed = true
 
+        // condition for misplaced flags
         if (currCell.isMine) {
             gGame.currentMines--
             gHelpers.lives--
@@ -170,6 +174,7 @@ function recursiveReveal(rowIdx, colIdx) {
             updateMinesLeft()
             updateLives()
         }
+        
         else gGame.revealedCells++
 
         // updates DOM
@@ -180,7 +185,7 @@ function recursiveReveal(rowIdx, colIdx) {
             elCell.classList.add('clicked-mine')
         }
         else elCell.innerText = (currCell.neighboringMines ? currCell.neighboringMines : '')
-        
+
         // checks other "0" cells for expanded area reveal and victory condition
         if (!currCell.neighboringMines && !currCell.isMine) recursiveReveal(currI, currJ)
         if (gGame.revealedCells === gGame.goal) handleGameEnd(true)

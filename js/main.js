@@ -36,7 +36,7 @@ var gGame = {
 
 // main function, called on start and on new game
 function onInit() {
-    // builds model
+    // builds board model
     gBoard = buildBoard(gGame.levelSelected)
 
     // resets global game elements, mostly needed for new games
@@ -66,7 +66,10 @@ function onInit() {
 // resets game on difficulty change
 function changeDifficulty(difficultyValue) {
 
+    // get's value from user's radio buttons selection
     gGame.levelSelected = levelsArray[difficultyValue]
+
+    // sends for appropriate function on manual difficulty
     if (gGame.levelSelected === levelsArray[4]) {
         handleManualDifficulty()
     }
@@ -85,7 +88,7 @@ function handleManualDifficulty() {
     const elCols = document.getElementById('manual-columns').value
     const elMines = document.getElementById('manual-mines').value
 
-    // makes sure they're valid, otherwise reselects 'default'
+    // makes sure they're valid, otherwise reselects 'default(intermediate)'
     if (elRows < 1 || elRows > 99 || elCols < 1 || elCols > 99 || elMines >= (elRows * elCols - 1)) {
         gGame.levelSelected = levelsArray[1]
         document.getElementById('intermediate').checked = true
@@ -103,6 +106,7 @@ function handleGameEnd(win) {
     // updates model
     gGame.isOn = false
     clearInterval(gTimer.timerInterval)
+    // if game was won and it's not manual difficulty calls highscores function
     if (win && (gGame.levelSelected !== levelsArray[4])) handleHighScore(gGame.levelSelected)
 
     // updates DOM
@@ -112,16 +116,9 @@ function handleGameEnd(win) {
     elEndModal.classList.remove('hidden')
 }
 
-function startTimer() {
-    // saves start of timer globaly
-    gTimer.timerStart = Date.now()
-
-    // sets fixed updates
-    gTimer.timerInterval = setInterval(updateTimer, 24)
-}
-
+// "game starting" function for first click
 function firstClick(elCell, i, j) {
-    // captures first cell clicked
+    // captures first cell
     const modelCell = gBoard[i][j]
     modelCell.isRevealed = true
 
@@ -138,15 +135,23 @@ function firstClick(elCell, i, j) {
     }
 
     else {
-
         elCell.innerText = modelCell.neighboringMines
     }
 
     elCell.classList.add('revealed-cell')
 
-    // condition for game "winning" on first click (low mines count boards or highly improbable random placements)
+    // condition for game "winning" on first click
+    // (low mines count boards or highly improbable random placements)
     if (gGame.revealedCells === gGame.goal) handleGameEnd(false)
 
     // starts the timer
     else startTimer()
+}
+
+function startTimer() {
+    // saves timer start globaly
+    gTimer.timerStart = Date.now()
+
+    // sets fixed updates
+    gTimer.timerInterval = setInterval(updateTimer, 24)
 }

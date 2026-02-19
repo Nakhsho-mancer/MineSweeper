@@ -28,21 +28,28 @@ function updateTimer() {
     // local const for calculations
     const currTime = Date.now()
 
-    // updates model and saves the time globaly for high scores to be added
+    // updates model and saves the time globaly for high scores
     gTimer.timerEnd = currTime - gTimer.timerStart
 
+    // gets legible format for time
     const legibleTime = makeTimeLegible(gTimer.timerEnd)
 
     // updates DOM
     elTimer.innerText = legibleTime
 }
 
+// function to make time passed legible
 function makeTimeLegible(illegibleTime) {
-    // variables to make time passed legible
+
+    // variable for minutes, stringify then handles less than 10 cases
     var timerMins = Math.floor(illegibleTime / 60000).toString()
     if (timerMins.length === 1) timerMins = '0' + timerMins
+
+    // seconds var
     var timerSecs = Math.floor((illegibleTime / 1000) % 60).toString()
     if (timerSecs.length === 1) timerSecs = '0' + timerSecs
+
+    // milliseconds var
     var timerMillis = Math.floor(illegibleTime % 1000).toString()
     if (timerMillis.length === 1) timerMillis = '00' + timerMillis
     else if (timerMillis.length === 2) timerMillis = '0' + timerMillis

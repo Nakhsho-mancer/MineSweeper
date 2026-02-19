@@ -14,7 +14,6 @@ function renderBoard(board) {
         strHTML += '<tr>'
 
         for (var j = 0; j < board[0].length; j++) {
-
             // individual cells with data indexes
             // for use by different functions
             strHTML += `<td class="cell" 
@@ -28,7 +27,6 @@ function renderBoard(board) {
 
     // update DOM
     elContainter.innerHTML = strHTML
-
     updateMinesLeft()
 }
 
@@ -59,6 +57,7 @@ function updateMinesLeft() {
     elMinesLeft.innerText = gGame.currentMines
 }
 
+// function to toggle settings menus
 function settingsBtn() {
     document.querySelector('.difficulty-settings-container').classList.toggle('hidden')
     document.querySelector('.helpers-box').classList.toggle('hidden')

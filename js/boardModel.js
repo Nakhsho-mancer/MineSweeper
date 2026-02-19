@@ -1,18 +1,19 @@
 'use strict'
 
-// global variables
-var gBoard
+// global variable
+var gBoard = []
 
 function buildBoard(levelSelected) {
-    // gets paramaters from the level selected
+    // gets paramaters from the selected level
     const height = levelSelected.rows
     const width = levelSelected.columns
 
-    // inital board
+    // initalize board
     var boardArray = []
 
     for (var i = 0; i < height; i++) {
-        boardArray.push([])
+        // initalize row
+        boardArray[i] = []
 
         for (var j = 0; j < width; j++) {
             // fills matrix with "cell" elements
@@ -64,17 +65,15 @@ function placeMines(mines) {
 }
 
 function countMinesAround(rowIdx, colIdx) {
-    // neighbors loop, counts mines around
     var minesAround = 0
     const neighborsArray = returnNeighborsIndexes(rowIdx, colIdx)
-
-    for (var counter = 0; counter < neighborsArray.length; counter++) {
-        const currCell = gBoard[neighborsArray[counter].i][neighborsArray[counter].j]
+    
+    // neighbors loop, counts mines around
+    for (var k = 0; k < neighborsArray.length; k++) {
+        const currCell = gBoard[neighborsArray[k].i][neighborsArray[k].j]
 
         if (currCell.isMine) minesAround++
     }
 
     return minesAround
 }
-
-function handleHighScore() { }

@@ -20,6 +20,7 @@ function handleHelperCheckbox(event, helperID) {
     const elHelpers = document.getElementsByName('helpers')
 
     // each case toggles appropriate model boolian
+    // and turns off deselect button
     switch (helperID) {
         case "lives":
             gHelpersBoolians.lives = (event.target.checked ? true : false)
@@ -92,7 +93,7 @@ function handleSafeClick() {
     const j = getRandomInt(0, gBoard[0].length)
     const currCell = gBoard[i][j]
 
-    // conditions for appropriate cell
+    // conditions for appropriate cell, when they "fail" function recalls itself
     if (currCell.isMine || currCell.isFlagged || currCell.isRevealed) return handleSafeClick()
 
     // updates model
@@ -178,7 +179,7 @@ function timedReveal(rowIdx, colIdx) {
             if (currCell.isFlagged) continue
             if (currCell.isRevealed) continue
 
-            // updates DOM
+            // reverts DOM
             const elCell = document.querySelector(`[data-row="${currI}"][data-col="${currJ}"]`)
             elCell.classList.remove('revealed-cell')
             elCell.innerText = ''
@@ -198,7 +199,7 @@ function resetHints() {
     else document.querySelector('.hints').classList.remove('hidden')
 
     // loop 3 times for hints
-    for (var i = 1; i <= 3; i++) {
+    for (var i = 1; i < 4; i++) {
         // capture DOM element
         const hint = document.querySelector(`.hint${i}`)
 
@@ -221,8 +222,10 @@ function handleExterminator(elExterBtn) {
             k--
             continue
         }
+
         else currCell.isMine = false
 
+        // condition for capturing flagged mines
         if (currCell.isFlagged) {
             currCell.isFlagged = false
             currCell.isRevealed = true
@@ -251,7 +254,11 @@ function handleExterminator(elExterBtn) {
             }
         }
     }
-    // normal updates to DOM
+
+    // unlikely condition that exterminator caused victory (but it can happen)
+    if (gGame.revealedCells === gGame.goal) handleGameEnd(true)
+
+    // updates to DOM
     updateMinesLeft()
     elExterBtn.classList.add('hidden')
 }
@@ -268,29 +275,18 @@ function handleMegaHint(elMegaBtn) {
 }
 
 function renderMega(megaArray) {
-    // variables to capture indexes from array
+    // variables to capture indexes from clicks
     var rowStart
     var rowEnd
     var colStart
     var colEnd
 
     // conditions to set start and end indexes
-    if (megaArray[0].i < megaArray[1].i) {
-        rowStart = megaArray[0].i
-        rowEnd = megaArray[1].i
-    }
-    else {
-        rowStart = megaArray[1].i
-        rowEnd = megaArray[0].i
-    }
-    if (megaArray[0].j < megaArray[1].j) {
-        colStart = megaArray[0].j
-        colEnd = megaArray[1].j
-    }
-    else {
-        colStart = megaArray[1].j
-        colEnd = megaArray[0].j
-    }
+    rowStart = ((megaArray[0].i < megaArray[1].i) ? megaArray[0].i : megaArray[1].i)
+    rowEnd = ((megaArray[0].i < megaArray[1].i) ? megaArray[1].i : megaArray[0].i)
+
+    colStart = ((megaArray[0].j < megaArray[1].j) ? megaArray[0].j : megaArray[1].j)
+    colEnd = ((megaArray[0].j < megaArray[1].j) ? megaArray[1].j : megaArray[0].j)
 
     // loop reveal
     for (var i = rowStart; i <= rowEnd; i++) {
@@ -301,7 +297,7 @@ function renderMega(megaArray) {
             if (currCell.isFlagged) continue
             if (currCell.isRevealed) continue
 
-            // updates DOM only
+            // updates to DOM only
             const elCell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`)
             elCell.classList.add('revealed-cell')
             elCell.innerText =
