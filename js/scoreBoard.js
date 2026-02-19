@@ -98,7 +98,7 @@ function renderScorBoard() {
             const elCurrScore = document.querySelector(`.HS-${i}_${j} span`)
 
             // converts to readable time if needed
-            const legibleTime = (gHighScoresMat[i][j] ? makeTimeLegible(gHighScoresMat[i][j]) : "Haven't happened yet")
+            const legibleTime = (gHighScoresMat[i][j] ? makeTimeLegible(gHighScoresMat[i][j]) : "Hasn't happened yet")
 
             // updates DOM
             elCurrScore.innerText = legibleTime
