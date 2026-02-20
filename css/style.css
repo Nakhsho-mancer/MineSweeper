@@ -17,10 +17,9 @@ body {
     margin-bottom: 10%;
 }
 
-table {
+.dont-click {
     border-collapse: collapse;
-    border: 5px solid black;
-    padding: 5px;
+    padding: 2px;
 }
 
 .cell {
@@ -112,11 +111,27 @@ table {
 }
 
 .high-scores-box {
-    background-color: rgb(250, 115, 239);
+    font-family:Verdana, Tahoma, sans-serif;
     color: black;
     display: flex;
     text-align: center;
     background-position: center;
     align-items: center;
     justify-content: center;
+}
+
+.high-scores-table {
+    background-color: rgb(244, 140, 146);
+    border-collapse: separate;
+    border: 5px solid black;
+}
+
+.MS-Header {
+    font-family: 'Courier New', Courier;
+    font-size: 70px;
+    font-weight: 1000;
+    filter: drop-shadow(5px 5px rgb(76, 3, 3));
+    background-image: linear-gradient(purple 10%, pink 45%, rgb(102, 135, 242) 80%);
+    background-clip: text;
+    color: transparent;
 }
