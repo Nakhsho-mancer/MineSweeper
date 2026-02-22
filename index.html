@@ -19,22 +19,38 @@
 
         <h2 class="hints"> Hints:
             <button class="hint1" onclick="handleHint(this)"
-                title="Click an urevealed cell to temporarily show it and its' neighboring cells">💡</button>
+                title="Click an urevealed cell to temporarily show it and its' neighboring cells">
+                <div class="shimmer-anim">💡</div>
+            </button>
             <button class="hint2" onclick="handleHint(this)"
-                title="Click an urevealed cell to temporarily show it and its' neighboring cells">💡</button>
+                title="Click an urevealed cell to temporarily show it and its' neighboring cells">
+                <div class="shimmer-anim">💡</div>
+            </button>
             <button class="hint3" onclick="handleHint(this)"
-                title="Click an urevealed cell to temporarily show it and its' neighboring cells">💡</button>
+                title="Click an urevealed cell to temporarily show it and its' neighboring cells">
+                <div class="shimmer-anim">💡</div>
+            </button>
         </h2>
 
         <button class="safe-clicks" onclick="handleSafeClick()" title="Marks an unrevealed safe cell to click on">
-            🛡️: <span></span>
+            <div class="shimmer-anim">
+                🛡️: <span></span>
+            </div>
         </button>
 
         <button class="exterminator" onclick="handleExterminator(this)"
-            title="Destroys 3 randmoly selected mines, single use">🔥</button>
+            title="Destroys 3 randmoly selected mines, single use">
+            <div class="shimmer-anim">
+                🔥
+            </div>
+        </button>
 
         <button class="mega-hint" onclick="handleMegaHint(this)"
-            title="Click on 2 cells to temporarily reveal the entire area between them, single use">🤖</button>
+            title="Click on 2 cells to temporarily reveal the entire area between them, single use">
+            <div class="shimmer-anim">
+                🤖
+            </div>
+        </button>
     </div>
 
     <div class="end-modal hidden"></div>
